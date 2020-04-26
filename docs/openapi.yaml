@@ -1,0 +1,620 @@
+openapi: 3.0.0
+info:
+  title: 'Warehouse API'
+  description: "This is document that help you know how to call API to backend.\n *   You can use the api key `Bearer` to test the authorization filters."
+  contact:
+    name: YaangVu
+    email: yaangvu@gmail.com
+  version: 1.0.0
+servers:
+  -
+    url: 'http://warehouse.yaangvu.asia/api/v1'
+    description: 'Server DEV'
+  -
+    url: 'http://warehouse.yaangvu.asia/api/v2'
+    description: 'Server Production'
+paths:
+  /categories:
+    get:
+      tags:
+        - Category
+      summary: 'List categories'
+      operationId: getCategories
+      parameters:
+        -
+          name: limit
+          in: query
+          description: 'Number of records you want to receive'
+          required: false
+          schema:
+            type: int
+        -
+          name: page
+          in: query
+          description: 'Page in pagination'
+          required: false
+          schema:
+            type: int
+      responses:
+        '200':
+          description: 'A list of categories'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+    post:
+      tags:
+        - Category
+      summary: 'Add a new Category to the databse'
+      description: ''
+      operationId: addCategory
+      requestBody:
+        description: 'Category object that needs to be added to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: 'Insert success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: 'Invalid input'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  '/categories/{categoryID}':
+    get:
+      tags:
+        - Category
+      summary: 'Get a Category'
+      operationId: getCategory
+      parameters:
+        -
+          name: categoryID
+          in: path
+          description: 'ID of category'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Information of the Category'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: 'Category not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  '/categories/{categoryId}':
+    put:
+      tags:
+        - Category
+      summary: 'Update an existing Category'
+      operationId: updateCategory
+      parameters:
+        -
+          name: categoryId
+          in: path
+          description: 'ID of category'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'Category object that needs to be updated to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: 'Information of the Category'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: 'Validation exception or Invalid ID supplied'
+        '404':
+          description: 'Category not found'
+      security:
+        -
+          whAuth: []
+    delete:
+      tags:
+        - Category
+      summary: 'Deletes a Category'
+      operationId: deleteCategory
+      parameters:
+        -
+          name: categoryId
+          in: path
+          description: 'Category id to delete'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Deletes successfully'
+        '404':
+          description: 'Category not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  /api/v1/inventories:
+    get:
+      tags:
+        - Inventory
+      summary: 'List inventories'
+      operationId: 'App\Http\Controllers\api\v1\InventoryController::index'
+      parameters:
+        -
+          name: limit
+          in: query
+          description: 'Number of records you want to receive'
+          required: false
+          schema:
+            type: int
+        -
+          name: page
+          in: query
+          description: 'Page in pagination'
+          required: false
+          schema:
+            type: int
+      responses:
+        '200':
+          description: 'A list of inventories'
+        default:
+          description: 'An exception when server error'
+  /products:
+    get:
+      tags:
+        - Product
+      summary: 'List products'
+      operationId: getProducts
+      parameters:
+        -
+          name: limit
+          in: query
+          description: 'Number of records you want to receive'
+          required: false
+          schema:
+            type: int
+        -
+          name: page
+          in: query
+          description: 'Page in pagination'
+          required: false
+          schema:
+            type: int
+      responses:
+        '200':
+          description: 'A list of products'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+    post:
+      tags:
+        - Product
+      summary: 'Add a new Product to the databse'
+      description: ''
+      operationId: addProduct
+      requestBody:
+        description: 'Product object that needs to be added to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: 'Insert success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: 'Invalid input'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  '/products/{productId}':
+    get:
+      tags:
+        - Product
+      summary: 'Display the Product.'
+      operationId: 'App\Http\Controllers\api\v1\ProductController::show'
+      parameters:
+        -
+          name: productId
+          in: path
+          description: 'ID of product'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Information of the Product'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: 'Product not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+    put:
+      tags:
+        - Product
+      summary: 'Update an existing Product'
+      operationId: updateProduct
+      parameters:
+        -
+          name: productId
+          in: path
+          description: 'ID of product'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'Product object that needs to be updated to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: 'Information of the Product'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: 'Validation exception or Invalid ID supplied'
+        '404':
+          description: 'Product not found'
+      security:
+        -
+          whAuth: []
+    delete:
+      tags:
+        - Product
+      summary: 'Deletes a Product'
+      operationId: deleteProduct
+      parameters:
+        -
+          name: productId
+          in: path
+          description: 'Product id to delete'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Deletes successfully'
+        '404':
+          description: 'Product not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  /units:
+    get:
+      tags:
+        - Unit
+      summary: 'List units'
+      operationId: getUnits
+      parameters:
+        -
+          name: limit
+          in: query
+          description: 'Number of records you want to receive'
+          required: false
+          schema:
+            type: int
+        -
+          name: page
+          in: query
+          description: 'Page in pagination'
+          required: false
+          schema:
+            type: int
+      responses:
+        '200':
+          description: 'A list of units'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Unit'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+    post:
+      tags:
+        - Unit
+      summary: 'Add a new Unit to the databse'
+      description: ''
+      operationId: addUnit
+      requestBody:
+        description: 'Unit object that needs to be added to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+      responses:
+        '201':
+          description: 'Insert success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+        '400':
+          description: 'Invalid input'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+  '/units/{unitId}':
+    get:
+      tags:
+        - Unit
+      summary: 'Display the Unit.'
+      operationId: 'App\Http\Controllers\api\v1\UnitController::show'
+      parameters:
+        -
+          name: unitId
+          in: path
+          description: 'ID of unit'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Information of the Unit'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+        '404':
+          description: 'Unit not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+    put:
+      tags:
+        - Unit
+      summary: 'Update an existing Unit'
+      operationId: updateUnit
+      parameters:
+        -
+          name: unitId
+          in: path
+          description: 'ID of unit'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 'Unit object that needs to be updated to the database'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Unit'
+      responses:
+        '200':
+          description: 'Information of the Unit'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+        '400':
+          description: 'Validation exception or Invalid ID supplied'
+        '404':
+          description: 'Unit not found'
+      security:
+        -
+          whAuth: []
+    delete:
+      tags:
+        - Unit
+      summary: 'Deletes a Unit'
+      operationId: deleteUnit
+      parameters:
+        -
+          name: unitId
+          in: path
+          description: 'Unit id to delete'
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 'Deletes successfully'
+        '404':
+          description: 'Unit not found'
+        '500':
+          description: 'An exception when server error'
+      security:
+        -
+          whAuth: []
+components:
+  schemas:
+    Category:
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: 'G12 - Gia vị'
+        parent_id:
+          type: integer
+          format: int64
+          example: '5'
+        created_by:
+          type: integer
+          format: int64
+          example: '1'
+        created_at:
+          type: string
+          format: datetime
+          example: '2019-09-15 18:36:47'
+        updated_at:
+          type: string
+          format: datetime
+          example: '2019-09-15 18:36:47'
+      type: object
+      xml:
+        name: Category
+    Inventory:
+      required:
+        - name
+      xml:
+        name: Inventory
+    Product:
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        sku:
+          type: string
+          example: SKU-VN-001
+        match_code:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: 'Bún hoa hồng'
+        full_name:
+          type: string
+          example: 'Bún hoa hồng xuất xưởng tại VN'
+        description:
+          type: string
+          example: 'Bún hoa hồng là 1 loại bún khá nổi tiếng tại các nước châu Âu'
+        barcode:
+          type: integer
+          format: int64
+          example: '2888878924'
+        qr_code:
+          type: string
+          example: GOIERJGKJEIRO224
+        brand:
+          type: string
+          example: Apple
+        category_id:
+          type: integer
+          format: int64
+          example: '1'
+        tags:
+          type: string
+          example: bún
+        created_by:
+          type: integer
+          format: int64
+          example: '1'
+        created_at:
+          type: string
+          format: datetime
+          example: '2019-09-15 18:36:47'
+        updated_at:
+          type: string
+          format: datetime
+          example: '2019-09-15 18:36:47'
+      type: object
+      xml:
+        name: Product
+    Unit:
+      required:
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+          example: Karton
+        is_base:
+          type: integer
+          format: int64
+          example: '1'
+        multiple:
+          type: integer
+          format: int64
+          example: '2'
+      type: object
+      xml:
+        name: Unit
+  securitySchemes:
+    whAuth:
+      type: apiKey
+      name: Authorization
+      in: header
+      bearerFormat: string
+tags:
+  -
+    name: Product
+    description: 'Everything about Product APIs'
+  -
+    name: Inventory
+    description: 'Everything about Inventory APIs'
+  -
+    name: Category
+    description: 'Everything about Category APIs'
